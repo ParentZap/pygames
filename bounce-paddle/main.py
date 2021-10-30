@@ -3,12 +3,14 @@ from pygame.locals import *
 from config import *
 from game_data import GameData
 from ball import Ball
+from fps_display import FpsDisplay
 
 
 class App:
 
     def __init__(self) -> None:
         pygame.init()
+        pygame.font.init()
         dirty_rects = []
         entities = []
         display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -18,13 +20,12 @@ class App:
     def update(self) -> None:
         for entity in self.game_data.entities:
             entity.update()
-
+    
     def draw(self) -> None:
         pygame.draw.rect(self.game_data.display, (0,0,0), (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
         for entity in self.game_data.entities:
             entity.draw()
 
-        # pygame.display.update()
         pygame.display.update(self.game_data.dirty_rects)
         self.game_data.dirty_rects.clear()
 
@@ -37,6 +38,8 @@ class App:
         self.clock = pygame.time.Clock()
         for _ in range(10):
             self.game_data.entities.append(Ball.random(self.game_data))
+
+        self.game_data.entities.append(FpsDisplay.top_left(self.game_data))
 
         while not self.quit:
             self.clock.tick(FPS)
