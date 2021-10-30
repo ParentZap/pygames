@@ -8,17 +8,17 @@ from game_data import GameData
 
 class FpsDisplay(Entity):
 
-    def __init__(self, game_data: GameData, x: int, y: int) -> None:
+    def __init__(self, game_data: GameData, clock: pygame.time.Clock, x: int, y: int) -> None:
         super().__init__(game_data)
+        self.clock = clock
         self.x = x
         self.y = y
         self.font = pygame.font.SysFont(name="Helvetica", size=30)
         self.text_surface = None
-        self.last_frame_time = None
         self.should_update = True
 
-    def top_left(game_data: GameData):
-        return FpsDisplay(game_data, x=0, y=0)
+    def top_left(game_data: GameData, clock: pygame.time.Clock):
+        return FpsDisplay(game_data, clock, x=0, y=0)
 
     def add_dirty_rect(self):
         if self.text_surface:
@@ -34,22 +34,17 @@ class FpsDisplay(Entity):
 
     def __update(self):
         self.add_dirty_rect()
-        curr_time = time.time()
-        if self.last_frame_time:
-            time_since = curr_time - self.last_frame_time
-            effective_fps = 1 / time_since
-            self.text_surface = self.font.render(
-                "{:2.2f}".format(effective_fps),
-                False,
-                (255, 255, 255))
-        self.last_frame_time = curr_time
+        self.text_surface = self.font.render(
+            "{:2.2f}".format(self.clock.get_fps()),
+            False,
+            (255, 255, 255))
         self.add_dirty_rect()
 
     def update(self):
         if self.should_update:
             self.should_update = False
             self.__update()
-            pygame.time.set_timer(DISPLAY_FPS_EVENT, 500)
+            pygame.time.set_timer(DISPLAY_FPS_EVENT, 100)
 
     def draw(self):
         if self.text_surface:

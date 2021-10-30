@@ -26,7 +26,6 @@ class Ball(Entity):
             dy=random.uniform(-5, 5)
         )
 
-
     def add_dirty_rect(self):
         rad_plus = self.rad * 1.1
         dirty_rect = pygame.Rect(
@@ -41,4 +40,7 @@ class Ball(Entity):
 
     def draw(self):
         pygame.draw.circle(
-            self.game_data.display, (120, 0, 0), (self.x, self.y), self.rad)
+            self.game_data.display,
+            (120, 0, 0),
+            (int(self.x), int(self.y)),
+            int(self.rad))

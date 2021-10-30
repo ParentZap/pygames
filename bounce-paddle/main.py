@@ -49,7 +49,7 @@ class App:
     def setup(self) -> None:
         self.clock = pygame.time.Clock()
         if DISPLAY_FPS:
-            self.fps_display = FpsDisplay.top_left(self.game_data)
+            self.fps_display = FpsDisplay.top_left(self.game_data, self.clock)
             self.game_data.entities.append(self.fps_display)
 
         for _ in range(10):
